@@ -1,6 +1,7 @@
 import 'package:bank_sqlite_app_alura/pages/contacts/contact_form_page.dart';
 import 'package:bank_sqlite_app_alura/pages/contacts/contacts_list_page.dart';
 import 'package:bank_sqlite_app_alura/pages/dashboard/dashboard_page.dart';
+import 'package:bank_sqlite_app_alura/routes/route_generator.dart';
 import 'package:bank_sqlite_app_alura/styles/colors_app.dart';
 import 'package:flutter/material.dart';
 
@@ -27,11 +28,12 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       initialRoute: "/",
-      routes: {
-        "/": (context) => const DashboardPage(),
-        "/contacts": (context) => ContactsListPage(),
-        "/contacts/form": (context) => ContactFormPage(),
-      },
+      onGenerateRoute: RouteGenerator.generateRoutes,
+      // routes: {
+      //   "/": (context) => const DashboardPage(),
+      //   "/contacts": (context) => ContactsListPage(),
+      //   "/contacts/form": (context) => ContactFormPage(),
+      // },
     );
   }
 }

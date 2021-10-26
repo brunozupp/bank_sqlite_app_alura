@@ -64,7 +64,36 @@ class _ContactsListPageState extends State<ContactsListPage> {
             itemCount: contacts.length,
             itemBuilder: (_,index) {
               return CardItemComponent(
-                contact: contacts[index]
+                contact: contacts[index],
+                delete: (id) async {
+                  var rowsAffected = await _dao.remove(id);
+
+                  if(rowsAffected > 0) {
+                    SnackbarUtils.showSnackbarSuccess(context: context, message: "Deletado com sucesso");
+                    setState(() {});
+                  } else {
+                    SnackbarUtils.showSnackbarError(context: context, message: "Não foi possível deletar");
+                  }
+
+                  return rowsAffected;
+                },
+                update: (contact) async {
+
+                  final canUpdate = await Navigator.of(context).pushNamed("/contacts/form", arguments: contact) as bool?;
+
+                  if(canUpdate != true) return 0;
+
+                  var rowsAffected = await _dao.update(contact);
+
+                  if(rowsAffected > 0) {
+                    SnackbarUtils.showSnackbarSuccess(context: context, message: "Editado com sucesso");
+                    setState(() {});
+                  } else {
+                    SnackbarUtils.showSnackbarError(context: context, message: "Não foi possível editar");
+                  }
+
+                  return rowsAffected;
+                },
               );
             },
           );

@@ -23,6 +23,20 @@ class ContactDao {
     return await db.insert(_tableName, map);
   }
 
+  Future<int> update(Contact contact) async {
+
+    final db = await createDatabase();
+
+    return await db.update(_tableName, contact.toMap(), where: 'id = ?', whereArgs: [contact.id!]);
+  }
+
+  Future<int> remove(int id) async {
+
+    final db = await createDatabase();
+
+    return await db.delete(_tableName, where: 'id = ?', whereArgs: [id]);
+  }
+
   Future<List<Contact>> findAll() async {
 
     final db = await createDatabase();

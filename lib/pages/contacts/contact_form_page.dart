@@ -1,4 +1,3 @@
-import 'package:bank_sqlite_app_alura/database/app_database.dart';
 import 'package:bank_sqlite_app_alura/database/dao/contact_dao.dart';
 import 'package:bank_sqlite_app_alura/models/contact.dart';
 import 'package:bank_sqlite_app_alura/styles/colors_app.dart';
@@ -6,7 +5,16 @@ import 'package:bank_sqlite_app_alura/utils/snackbar_utils.dart';
 import 'package:flutter/material.dart';
 
 class ContactFormPage extends StatelessWidget {
-  ContactFormPage({ Key? key }) : super(key: key);
+
+  final Contact? contact;
+
+  ContactFormPage({ 
+    Key? key,
+    this.contact
+  }) : super(key: key) {
+    _fullnameController.text = contact?.name ?? "";
+    _accountController.text = contact?.accountNumber.toString() ?? "";
+  }
 
   final _formKey = GlobalKey<FormState>();
   final _fullnameController = TextEditingController();
@@ -101,9 +109,13 @@ class ContactFormPage extends StatelessWidget {
                       return;
                     }
 
-                    final contact = Contact(name: name, accountNumber: accountNumber);
+                    final object = Contact(id: contact?.id, name: name, accountNumber: accountNumber);
 
-                    await _dao.save(contact);
+                    if(contact == null) {
+                      await _dao.save(object);
+                    } else {
+                      await _dao.update(object);
+                    }
 
                     Navigator.of(context).pop(true);
                   }, 
