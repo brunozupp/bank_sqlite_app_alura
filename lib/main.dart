@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       initialRoute: "/",
       routes: {
         "/": (context) => const DashboardPage(),
-        "/contacts": (context) => const ContactsListPage(),
+        "/contacts": (context) => ContactsListPage(),
         "/contacts/form": (context) => ContactFormPage(),
       },
     );

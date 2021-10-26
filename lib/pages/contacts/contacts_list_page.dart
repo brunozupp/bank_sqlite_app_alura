@@ -1,9 +1,11 @@
+import 'package:bank_sqlite_app_alura/database/app_database.dart';
 import 'package:bank_sqlite_app_alura/models/contact.dart';
+import 'package:bank_sqlite_app_alura/pages/contacts/components/card_item_component.dart';
 import 'package:flutter/material.dart';
 
 class ContactsListPage extends StatelessWidget {
   const ContactsListPage({ Key? key }) : super(key: key);
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,26 +21,40 @@ class ContactsListPage extends StatelessWidget {
           final contact = await Navigator.of(context).pushNamed("/contacts/form") as Contact?;
         },
       ),
-      body: ListView(
-        children: const [
-          Card(
-            child: ListTile(
-              title: Text(
-                "Alex",
-                style: TextStyle(
-                  fontSize: 24
-                ),
-              ),
-              subtitle: Text(
-                "1000",
-                style: TextStyle(
-                  fontSize: 16
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+      body: FutureBuilder<List<Contact>>(
+        future: findAll(),
+        builder: (context,snapshot) {
+
+          if(snapshot.hasError) {
+            return const Center(
+              child: Text("Erro na execução"),
+            );
+          }
+
+          if(snapshot.connectionState == ConnectionState.waiting || snapshot.connectionState == ConnectionState.none) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if(snapshot.hasData && snapshot.data!.isEmpty) {
+            return const Center(
+              child: Text("Lista vazia"),
+            ); 
+          }
+
+          final contacts = snapshot.data!;
+
+          return ListView.builder(
+            itemCount: contacts.length,
+            itemBuilder: (_,index) {
+              return CardItemComponent(
+                contact: contacts[index]
+              );
+            },
+          );
+        },
+      )
     );
   }
 }
