@@ -1,3 +1,5 @@
+import 'package:bank_sqlite_app_alura/database/app_database.dart';
+import 'package:bank_sqlite_app_alura/database/dao/contact_dao.dart';
 import 'package:bank_sqlite_app_alura/models/contact.dart';
 import 'package:bank_sqlite_app_alura/styles/colors_app.dart';
 import 'package:bank_sqlite_app_alura/utils/snackbar_utils.dart';
@@ -9,6 +11,8 @@ class ContactFormPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final _fullnameController = TextEditingController();
   final _accountController = TextEditingController();
+
+  final ContactDao _dao = ContactDao();
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +36,22 @@ class ContactFormPage extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 24.0
                 ),
+                validator: (value) {
+                  if(value == null || value.isEmpty) {
+                    return "Campo obrigatório";
+                  }
+
+                  RegExp regex = RegExp(r"[0-9]");
+
+                  if(regex.hasMatch(value)) {
+                    return "Não pode conter números, apenas letras";
+                  }
+
+                  return null;
+                },
               ),
               TextFormField(
-                controller: _fullnameController,
+                controller: _accountController,
                 decoration: const InputDecoration(
                   labelText: 'Conta',
                 ),
@@ -43,6 +60,19 @@ class ContactFormPage extends StatelessWidget {
                   fontSize: 24.0
                 ),
                 maxLength: 4,
+                validator: (value) {
+                  if(value == null || value.isEmpty) {
+                    return "Campo obrigatório";
+                  }
+
+                  RegExp regex = RegExp(r"[a-zA-Z]");
+
+                  if(regex.hasMatch(value)) {
+                    return "Não pode conter letras, apenas números";
+                  }
+
+                  return null;
+                },
               ),
               const SizedBox(
                 height: 10,
@@ -56,7 +86,13 @@ class ContactFormPage extends StatelessWidget {
                   child: const Text(
                     "Salvar"
                   ),
-                  onPressed: () {
+                  onPressed: () async {
+
+                    if(!_formKey.currentState!.validate()) {
+                      SnackbarUtils.showSnackbarError(context: context, message: "Erro de validação");
+                      return;
+                    }
+
                     final String name = _fullnameController.text;
                     final int? accountNumber = int.tryParse(_accountController.text);
 
@@ -65,9 +101,11 @@ class ContactFormPage extends StatelessWidget {
                       return;
                     }
 
-                    //final contact = Contact(name: name, accountNumber: accountNumber);
+                    final contact = Contact(name: name, accountNumber: accountNumber);
 
-                    //Navigator.of(context).pop(contact);
+                    await _dao.save(contact);
+
+                    Navigator.of(context).pop(true);
                   }, 
                 ),
               ),

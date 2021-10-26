@@ -1,11 +1,21 @@
 import 'package:bank_sqlite_app_alura/database/app_database.dart';
+import 'package:bank_sqlite_app_alura/database/dao/contact_dao.dart';
 import 'package:bank_sqlite_app_alura/models/contact.dart';
 import 'package:bank_sqlite_app_alura/pages/contacts/components/card_item_component.dart';
+import 'package:bank_sqlite_app_alura/utils/snackbar_utils.dart';
 import 'package:flutter/material.dart';
 
-class ContactsListPage extends StatelessWidget {
+class ContactsListPage extends StatefulWidget {
   const ContactsListPage({ Key? key }) : super(key: key);
-  
+
+  @override
+  State<ContactsListPage> createState() => _ContactsListPageState();
+}
+
+class _ContactsListPageState extends State<ContactsListPage> {
+
+  final ContactDao _dao = ContactDao();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,13 +28,18 @@ class ContactsListPage extends StatelessWidget {
         ),
         onPressed: () async {
 
-          final contact = await Navigator.of(context).pushNamed("/contacts/form") as Contact?;
+          final canUpdate = await Navigator.of(context).pushNamed("/contacts/form") as bool?;
+
+          if(canUpdate == true) {
+            setState(() {
+              SnackbarUtils.showSnackbarSuccess(context: context, message: "Adicionado com sucesso");
+            });
+          }
         },
       ),
       body: FutureBuilder<List<Contact>>(
-        future: findAll(),
+        future: _dao.findAll(),
         builder: (context,snapshot) {
-
           if(snapshot.hasError) {
             return const Center(
               child: Text("Erro na execução"),
