@@ -1,4 +1,3 @@
-import 'package:bank_sqlite_app_alura/database/app_database.dart';
 import 'package:bank_sqlite_app_alura/database/dao/contact_dao.dart';
 import 'package:bank_sqlite_app_alura/models/contact.dart';
 import 'package:bank_sqlite_app_alura/pages/contacts/components/card_item_component.dart';

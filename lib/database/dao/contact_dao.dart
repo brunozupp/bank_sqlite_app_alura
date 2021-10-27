@@ -1,7 +1,10 @@
 import 'package:bank_sqlite_app_alura/database/app_database.dart';
 import 'package:bank_sqlite_app_alura/models/contact.dart';
+import 'package:sqflite/sqflite.dart';
 
 class ContactDao {
+
+  static const String _tableName = 'contacts';
 
   static const String tableSql = '''
       CREATE TABLE $_tableName(
@@ -11,8 +14,6 @@ class ContactDao {
       )
     ''';
 
-  static const String _tableName = 'contacts';
-  
   Future<int> save(Contact contact) async {
 
     final db = await createDatabase();
@@ -27,7 +28,15 @@ class ContactDao {
 
     final db = await createDatabase();
 
-    return await db.update(_tableName, contact.toMap(), where: 'id = ?', whereArgs: [contact.id!]);
+    final map = contact.toMap();
+
+    final id = contact.id;
+    map.remove("id");
+    
+    return await db.update(_tableName, map, where: 'id = ?', whereArgs: [id], conflictAlgorithm: ConflictAlgorithm.replace);
+    // return await db.rawUpdate("UPDATE $_tableName SET name = ?, account_number = ? WHERE id = ?", 
+    //   [contact.name,contact.accountNumber,contact.id]
+    // );
   }
 
   Future<int> remove(int id) async {

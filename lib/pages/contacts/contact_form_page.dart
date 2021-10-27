@@ -109,7 +109,7 @@ class ContactFormPage extends StatelessWidget {
                       return;
                     }
 
-                    final object = Contact(id: contact?.id, name: name, accountNumber: accountNumber);
+                    final object = Contact(id: contact?.id ?? 0, name: name, accountNumber: accountNumber);
 
                     if(contact == null) {
                       await _dao.save(object);

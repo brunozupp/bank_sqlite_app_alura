@@ -51,7 +51,7 @@ class CardItemComponent extends StatelessWidget {
 
                 if(canDelete != true) return;
 
-                await delete(contact.id!);
+                await delete(contact.id);
               }, 
               icon: const Icon(
                 Icons.delete
