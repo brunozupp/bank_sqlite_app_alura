@@ -2,6 +2,7 @@ import 'package:bank_sqlite_app_alura/models/contact.dart';
 import 'package:bank_sqlite_app_alura/pages/contacts/contact_form_page.dart';
 import 'package:bank_sqlite_app_alura/pages/contacts/contacts_list_page.dart';
 import 'package:bank_sqlite_app_alura/pages/dashboard/dashboard_page.dart';
+import 'package:bank_sqlite_app_alura/pages/transactions/transactions_list_page.dart';
 import 'package:flutter/material.dart';
 
 class RouteGenerator {
@@ -26,6 +27,9 @@ class RouteGenerator {
         }
 
         return _errorWrongType();
+      
+      case '/transactions':
+        return MaterialPageRoute(builder: (_) => const TransactionsListPage());
       
       default:
         _routeNotFound();
