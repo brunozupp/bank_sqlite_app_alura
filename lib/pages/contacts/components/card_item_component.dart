@@ -1,5 +1,4 @@
 import 'package:bank_sqlite_app_alura/models/contact.dart';
-import 'package:bank_sqlite_app_alura/models/transaction.dart';
 import 'package:bank_sqlite_app_alura/utils/modal_utils.dart';
 import 'package:flutter/material.dart';
 

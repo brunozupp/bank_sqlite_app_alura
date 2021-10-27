@@ -1,6 +1,4 @@
-import 'package:bank_sqlite_app_alura/http/webclient.dart';
 import 'package:bank_sqlite_app_alura/http/webclients/transaction_webclient.dart';
-import 'package:bank_sqlite_app_alura/models/contact.dart';
 import 'package:bank_sqlite_app_alura/models/transaction.dart';
 import 'package:bank_sqlite_app_alura/utils/snackbar_utils.dart';
 import 'package:bank_sqlite_app_alura/widgets/centered_message.dart';
