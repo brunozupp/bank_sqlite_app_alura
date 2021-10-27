@@ -1,4 +1,5 @@
 import 'package:bank_sqlite_app_alura/models/contact.dart';
+import 'package:bank_sqlite_app_alura/models/transaction.dart';
 import 'package:bank_sqlite_app_alura/utils/modal_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -7,18 +8,21 @@ class CardItemComponent extends StatelessWidget {
   final Contact contact;
   final Future<int> Function(int) delete;
   final Future<int> Function(Contact) update;
+  final VoidCallback onTap;
 
   const CardItemComponent({ 
     Key? key, 
     required this.contact, 
     required this.delete, 
     required this.update, 
+    required this.onTap, 
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
+        onTap: onTap,
         title: Text(
           contact.name,
           style: const TextStyle(

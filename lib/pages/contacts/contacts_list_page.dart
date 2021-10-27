@@ -64,6 +64,13 @@ class _ContactsListPageState extends State<ContactsListPage> {
             itemBuilder: (_,index) {
               return CardItemComponent(
                 contact: contacts[index],
+                onTap: () async {
+                  final isSuccess = await Navigator.of(context).pushNamed("/transactions/form", arguments: contacts[index]);
+
+                  if(isSuccess != null) {
+                    SnackbarUtils.showSnackbarSuccess(context: context, message: "Transação realizada com sucesso");
+                  }
+                },
                 delete: (id) async {
                   var rowsAffected = await _dao.remove(id);
 

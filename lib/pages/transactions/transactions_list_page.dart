@@ -1,6 +1,9 @@
+import 'package:bank_sqlite_app_alura/http/webclient.dart';
+import 'package:bank_sqlite_app_alura/http/webclients/transaction_webclient.dart';
 import 'package:bank_sqlite_app_alura/models/contact.dart';
 import 'package:bank_sqlite_app_alura/models/transaction.dart';
 import 'package:bank_sqlite_app_alura/utils/snackbar_utils.dart';
+import 'package:bank_sqlite_app_alura/widgets/centered_message.dart';
 import 'package:flutter/material.dart';
 
 import 'components/card_item_component.dart';
@@ -12,22 +15,15 @@ class TransactionsListPage extends StatefulWidget {
   State<TransactionsListPage> createState() => _TransactionsListPageState();
 }
 
-final List<Transaction> list = List<Transaction>.empty(growable: true);
-
 class _TransactionsListPageState extends State<TransactionsListPage> {
 
-  @override
-  void initState() {
-    super.initState();
-
-    list.add(Transaction(value: 1500, contact: Contact(name: "Bruno", accountNumber: 1236)));
-  }
+  final webclient = TransactionWebClient();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Contatos"),
+        title: const Text("Feed de transações"),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(
@@ -44,13 +40,41 @@ class _TransactionsListPageState extends State<TransactionsListPage> {
           }
         },
       ),
-      body: ListView.builder(
-        itemCount: list.length,
-        itemBuilder: (_,index) {
-          return CardItemComponent(
-            transaction: list[index],  
+      body: FutureBuilder<List<Transaction>>(
+        future: webclient.findAll(),
+        builder: (context, snapshot) {
+
+          if(snapshot.hasError) {
+            return const CenteredMessage(
+              message: "Erro na execução",
+              icon: Icons.error,
+              iconSize: 70,
+            );
+          }
+
+          if(snapshot.connectionState == ConnectionState.waiting || snapshot.connectionState == ConnectionState.none) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if(snapshot.hasData && snapshot.data!.isEmpty) {
+            return const CenteredMessage(
+              message: "Lista vazia",
+            );
+          }
+
+          final transactions = snapshot.data!;
+
+          return ListView.builder(
+            itemCount: transactions.length,
+            itemBuilder: (_,index) {
+              return CardItemComponent(
+                transaction: transactions[index],  
+              );
+            },
           );
-        },
+        }
       ),
     );
   }
