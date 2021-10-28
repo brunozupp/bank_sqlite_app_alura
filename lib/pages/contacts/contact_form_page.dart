@@ -4,23 +4,38 @@ import 'package:bank_sqlite_app_alura/styles/colors_app.dart';
 import 'package:bank_sqlite_app_alura/utils/snackbar_utils.dart';
 import 'package:flutter/material.dart';
 
-class ContactFormPage extends StatelessWidget {
+class ContactFormPage extends StatefulWidget {
 
   final Contact? contact;
 
-  ContactFormPage({ 
+  const ContactFormPage({ 
     Key? key,
     this.contact
-  }) : super(key: key) {
-    _fullnameController.text = contact?.name ?? "";
-    _accountController.text = contact?.accountNumber.toString() ?? "";
+  }) : super(key: key);
+
+  @override
+  State<ContactFormPage> createState() => _ContactFormPageState();
+}
+
+class _ContactFormPageState extends State<ContactFormPage> {
+
+  @override
+  void initState() {
+    super.initState();
+
+    _fullnameController.text = widget.contact?.name ?? "";
+    _accountController.text = widget.contact?.accountNumber.toString() ?? "";
   }
 
   final _formKey = GlobalKey<FormState>();
+
   final _fullnameController = TextEditingController();
+
   final _accountController = TextEditingController();
 
   final ContactDao _dao = ContactDao();
+
+  var isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -85,40 +100,59 @@ class ContactFormPage extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: ColorsApp.primaryColor
+              IgnorePointer(
+                ignoring: isLoading,
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: ColorsApp.primaryColor
+                    ),
+                    child: !isLoading
+                      ? const Text(
+                        "Transferir"
+                      )
+                      : const SizedBox(
+                        height: 18,
+                        width: 18,
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
+                      ),
+                    onPressed: () async {
+
+                      if(!_formKey.currentState!.validate()) {
+                        SnackbarUtils.showSnackbarError(context: context, message: "Erro de validação");
+                        return;
+                      }
+
+                      final String name = _fullnameController.text;
+                      final int? accountNumber = int.tryParse(_accountController.text);
+
+                      if(accountNumber == null) {
+                        SnackbarUtils.showSnackbarError(context: context, message: "Erro na conversão da conta");
+                        return;
+                      }
+
+                      final object = Contact(id: widget.contact?.id ?? 0, name: name, accountNumber: accountNumber);
+
+                      setState(() {
+                        isLoading = true;
+                      });
+
+                      if(widget.contact == null) {
+                        await _dao.save(object);
+                      } else {
+                        await _dao.update(object);
+                      }
+
+                      setState(() {
+                        isLoading = false;
+                      });
+
+                      Navigator.of(context).pop(true);
+                    }, 
                   ),
-                  child: const Text(
-                    "Salvar"
-                  ),
-                  onPressed: () async {
-
-                    if(!_formKey.currentState!.validate()) {
-                      SnackbarUtils.showSnackbarError(context: context, message: "Erro de validação");
-                      return;
-                    }
-
-                    final String name = _fullnameController.text;
-                    final int? accountNumber = int.tryParse(_accountController.text);
-
-                    if(accountNumber == null) {
-                      SnackbarUtils.showSnackbarError(context: context, message: "Erro na conversão da conta");
-                      return;
-                    }
-
-                    final object = Contact(id: contact?.id ?? 0, name: name, accountNumber: accountNumber);
-
-                    if(contact == null) {
-                      await _dao.save(object);
-                    } else {
-                      await _dao.update(object);
-                    }
-
-                    Navigator.of(context).pop(true);
-                  }, 
                 ),
               ),
             ],
