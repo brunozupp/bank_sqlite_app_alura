@@ -9,7 +9,7 @@ class TransactionFormPage extends StatefulWidget {
 
   final Contact contact;
 
-  TransactionFormPage({ 
+  const TransactionFormPage({ 
     Key? key,
     required this.contact
   }) : super(key: key);
