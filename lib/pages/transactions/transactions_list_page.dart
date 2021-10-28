@@ -1,7 +1,8 @@
 import 'package:bank_sqlite_app_alura/http/webclients/transaction_webclient.dart';
 import 'package:bank_sqlite_app_alura/models/transaction.dart';
 import 'package:bank_sqlite_app_alura/utils/snackbar_utils.dart';
-import 'package:bank_sqlite_app_alura/widgets/centered_message.dart';
+import 'package:bank_sqlite_app_alura/widgets/centered_message_widget.dart';
+import 'package:bank_sqlite_app_alura/widgets/progress_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'components/card_item_component.dart';
@@ -28,7 +29,7 @@ class _TransactionsListPageState extends State<TransactionsListPage> {
         builder: (context, snapshot) {
 
           if(snapshot.hasError) {
-            return const CenteredMessage(
+            return const CenteredMessageWidget(
               message: "Erro na execução",
               icon: Icons.error,
               iconSize: 70,
@@ -36,13 +37,11 @@ class _TransactionsListPageState extends State<TransactionsListPage> {
           }
 
           if(snapshot.connectionState == ConnectionState.waiting || snapshot.connectionState == ConnectionState.none) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const ProgressWidget();
           }
 
           if(snapshot.hasData && snapshot.data!.isEmpty) {
-            return const CenteredMessage(
+            return const CenteredMessageWidget(
               message: "Lista vazia",
             );
           }
