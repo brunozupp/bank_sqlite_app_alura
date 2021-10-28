@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 class CardItemComponent extends StatelessWidget {
 
   final Transaction transaction;
+  final VoidCallback onDelete;
 
   const CardItemComponent({ 
     Key? key, 
     required this.transaction, 
+    required this.onDelete,
   }) : super(key: key);
 
   @override
@@ -28,6 +30,12 @@ class CardItemComponent extends StatelessWidget {
         ),
         leading: const Icon(
           Icons.monetization_on
+        ),
+        trailing: IconButton(
+          icon: const Icon(
+            Icons.delete
+          ),
+          onPressed: onDelete, 
         ),
       ),
     );

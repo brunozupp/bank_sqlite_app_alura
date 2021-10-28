@@ -38,4 +38,21 @@ class TransactionWebClient {
     return null;
   }
 
+  Future<bool> delete(String id) async {
+
+    final result = await client.delete(
+      Uri.parse(baseUrl + "/" + id),
+      headers: {
+        "Content-Type": "application/json",
+        "password": "1000"
+      },
+    );
+
+    if(result.statusCode == HttpStatus.ok) {
+      return true;
+    }
+
+    return false;
+  }
+
 }

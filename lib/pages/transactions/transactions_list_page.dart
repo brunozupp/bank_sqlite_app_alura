@@ -23,21 +23,6 @@ class _TransactionsListPageState extends State<TransactionsListPage> {
       appBar: AppBar(
         title: const Text("Feed de transações"),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(
-          Icons.add
-        ),
-        onPressed: () async {
-
-          final canUpdate = await Navigator.of(context).pushNamed("/contacts/form") as bool?;
-
-          if(canUpdate == true) {
-            setState(() {
-              SnackbarUtils.showSnackbarSuccess(context: context, message: "Adicionado com sucesso");
-            });
-          }
-        },
-      ),
       body: FutureBuilder<List<Transaction>>(
         future: webclient.findAll(),
         builder: (context, snapshot) {
@@ -68,7 +53,19 @@ class _TransactionsListPageState extends State<TransactionsListPage> {
             itemCount: transactions.length,
             itemBuilder: (_,index) {
               return CardItemComponent(
-                transaction: transactions[index],  
+                transaction: transactions[index],
+                onDelete: () async {
+                  var result = await webclient.delete(transactions[index].id!);
+
+                  if(result) {
+                    SnackbarUtils.showSnackbarSuccess(context: context, message: "Sucesso ao deletar");
+                    setState(() {
+                      
+                    });
+                  } else {
+                    SnackbarUtils.showSnackbarError(context: context, message: "Falha ao deletar");
+                  }
+                }
               );
             },
           );
