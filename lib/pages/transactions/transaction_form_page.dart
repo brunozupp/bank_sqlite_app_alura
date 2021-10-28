@@ -1,7 +1,11 @@
+import 'dart:async';
+
+import 'package:bank_sqlite_app_alura/http/http_exception_error.dart';
 import 'package:bank_sqlite_app_alura/http/webclients/transaction_webclient.dart';
 import 'package:bank_sqlite_app_alura/models/contact.dart';
 import 'package:bank_sqlite_app_alura/models/transaction.dart';
 import 'package:bank_sqlite_app_alura/styles/colors_app.dart';
+import 'package:bank_sqlite_app_alura/utils/modal_utils.dart';
 import 'package:bank_sqlite_app_alura/utils/snackbar_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -69,6 +73,14 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                       validator: (value) {
                         if(value == null || value.isEmpty) return "Valor obrigatório";
 
+                        RegExp regex = RegExp("[a-zA-Z]");
+
+                        if(regex.hasMatch(value)) return "Não pode conter letras, apenas números";
+
+                        final valueParsed = double.parse(value);
+
+                        if(valueParsed < 0.0) return "Valor não pode ser menor que 0";
+
                         return null;
                       },
                     ),
@@ -108,6 +120,13 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                               return;
                             }
 
+                            var password = await ModalUtils.showModalGetAuthentication(context);
+
+                            if(password == null || password.isEmpty) {
+                              SnackbarUtils.showSnackbarError(context: context, message: "A senha não pode ser vazia");
+                              return;
+                            }
+
                             final transactionCreated = Transaction(
                               contact: widget.contact,
                               value: value
@@ -117,18 +136,25 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                               isLoading = true;
                             });
 
-                            final result = await webclient.save(transactionCreated);
-
+                            // Tem que colocar a TimeoutException vindo primeiro pois ela é mais especifica
+                            final result = await webclient.save(transactionCreated, password)
+                              .catchError((error) {
+                                SnackbarUtils.showSnackbarError(context: context, message: "Tempo de resposta muito elevado");
+                              }, test: (e) => e is TimeoutException) // Testando para ter uma segurança a mais ao ter passado uma exceção
+                              .catchError((error) {
+                                SnackbarUtils.showSnackbarError(context: context, message: error.message);
+                              }, test: (e) => e is HttpExceptionError)
+                              .catchError((error) {
+                                SnackbarUtils.showSnackbarError(context: context, message: "Erro desconhecido");
+                              }, test: (e) => e is Exception);
+                              
                             setState(() {
                               isLoading = false;
                             });
 
-                            if(result == null) {
-                              SnackbarUtils.showSnackbarError(context: context, message: "Não foi possível salvar");
-                              return;
+                            if(result != null) {
+                              Navigator.of(context).pop(result);
                             }
-
-                            Navigator.of(context).pop(result);
                           },
                         ),
                       ),

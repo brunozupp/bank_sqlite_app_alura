@@ -88,7 +88,13 @@ class _ContactFormPageState extends State<ContactFormPage> {
                     return "Campo obrigatório";
                   }
 
-                  RegExp regex = RegExp(r"[a-zA-Z]");
+                  RegExp regex = RegExp("[a-zA-Z]");
+
+                  if(regex.hasMatch(value)) return "Não pode conter letras, apenas números";
+
+                  final valueParsed = int.parse(value);
+
+                  if(valueParsed < 0) return "Valor não pode ser menor que 0";
 
                   if(regex.hasMatch(value)) {
                     return "Não pode conter letras, apenas números";

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:bank_sqlite_app_alura/http/http_exception_error.dart';
 import 'package:bank_sqlite_app_alura/models/transaction.dart';
 
 import '../webclient.dart';
@@ -11,7 +12,7 @@ class TransactionWebClient {
 
     // Timeout é importante para evitar da tela ficar em loading infinito quando o serviço não está rápido, assim evitando
     // a perca de recursos por parte do usuário. Ai lança uma exceção de timeout
-    var result = await client.get(Uri.parse(baseUrl)).timeout(const Duration(seconds: 5));
+    var result = await client.get(Uri.parse(baseUrl));
     
     final List decodedJson = jsonDecode(result.body);
 
@@ -20,13 +21,13 @@ class TransactionWebClient {
     return transactions;
   }
 
-  Future<Transaction?> save(Transaction transaction) async {
+  Future<Transaction?> save(Transaction transaction, String password) async {
 
     final result = await client.post(
       Uri.parse(baseUrl),
       headers: {
         "Content-Type": "application/json",
-        "password": "1000"
+        "password": password
       },
       body: transaction.toJson(),
     );
@@ -35,7 +36,7 @@ class TransactionWebClient {
       return Transaction.fromJson(result.body);
     }
 
-    return null;
+    throw HttpExceptionError(result.statusCode);
   }
 
   Future<bool> delete(String id) async {

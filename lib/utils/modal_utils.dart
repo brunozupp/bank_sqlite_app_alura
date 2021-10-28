@@ -3,6 +3,42 @@ import 'package:flutter/material.dart';
 
 abstract class ModalUtils {
 
+  static Future<String?> showModalGetAuthentication(BuildContext context) async {
+    
+    String value = "";
+    
+    return await showDialog(
+      context: context, 
+      builder: (context) => AlertDialog(
+        title: const Text("Autenticação"),
+        content: TextField(
+          maxLength: 4,
+          obscureText: true,
+          style: const TextStyle(
+            fontSize: 64,
+            letterSpacing: 8
+          ),
+          keyboardType: TextInputType.number,
+          textAlign: TextAlign.center,
+          onChanged: (val) => value = val,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder()
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(), 
+            child: const Text("Cancelar")
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(value), 
+            child: const Text("Confirmar")
+          )
+        ],
+      )
+    );
+  }
+
   static Future<bool?> showModalConfirmation(BuildContext context, {String? message}) async {
     return await showDialog(
       context: context, 
