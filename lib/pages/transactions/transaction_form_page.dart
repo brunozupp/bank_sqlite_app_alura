@@ -153,12 +153,13 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                               }, test: (e) => e is HttpExceptionError)
                               .catchError((error) {
                                 SnackbarUtils.showSnackbarError(context: context, message: "Erro desconhecido");
-                              }, test: (e) => e is Exception);
-                              
-                            setState(() {
-                              isLoading = false;
-                            });
-
+                              }, test: (e) => e is Exception)
+                              .whenComplete(() {
+                                setState(() {
+                                  isLoading = false;
+                                });
+                              });
+                            
                             if(result != null) {
                               Navigator.of(context).pop(result);
                             }
