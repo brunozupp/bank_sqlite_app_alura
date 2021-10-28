@@ -54,7 +54,7 @@ class _TransactionsListPageState extends State<TransactionsListPage> {
               return CardItemComponent(
                 transaction: transactions[index],
                 onDelete: () async {
-                  var result = await webclient.delete(transactions[index].id!);
+                  var result = await webclient.delete(transactions[index].id);
 
                   if(result) {
                     SnackbarUtils.showSnackbarSuccess(context: context, message: "Sucesso ao deletar");

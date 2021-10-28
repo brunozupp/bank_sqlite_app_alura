@@ -8,6 +8,7 @@ import 'package:bank_sqlite_app_alura/styles/colors_app.dart';
 import 'package:bank_sqlite_app_alura/utils/modal_utils.dart';
 import 'package:bank_sqlite_app_alura/utils/snackbar_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class TransactionFormPage extends StatefulWidget {
 
@@ -23,6 +24,11 @@ class TransactionFormPage extends StatefulWidget {
 }
 
 class _TransactionFormPageState extends State<TransactionFormPage> {
+
+  // Idempotência - evitando erro de duplicidade com o UUID
+  // O fluxo que eu tinha feito evitaria esse erro
+  final String transctionId = const Uuid().v4();
+
   final _valueController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
@@ -128,6 +134,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                             }
 
                             final transactionCreated = Transaction(
+                              id: transctionId,
                               contact: widget.contact,
                               value: value
                             );

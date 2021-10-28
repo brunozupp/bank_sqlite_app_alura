@@ -4,19 +4,19 @@ import 'package:bank_sqlite_app_alura/models/contact.dart';
 
 class Transaction {
   
-  final String? id;
+  final String id;
   final double value;
   final Contact contact;
   
   Transaction({
-    this.id,
+    required this.id,
     required this.value,
     required this.contact,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      if(id != null && id!.isNotEmpty) 'id': id,
+      'id': id,
       'value': value,
       'contact': contact.toMap(),
     };

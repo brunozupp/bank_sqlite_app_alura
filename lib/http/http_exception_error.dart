@@ -6,14 +6,22 @@ class HttpExceptionError implements Exception {
   final int statusCode;
 
   HttpExceptionError(this.statusCode) {
-    message = _errorsHttp[statusCode] ?? "Erro não identificado";
+    message = _errorsHttp(statusCode);
   }
-
   
-  static const Map<int,String> _errorsHttp = {
-    HttpStatus.badRequest: "Erro de Bad Request",
-    HttpStatus.unauthorized: "Não está autorizado",
-    HttpStatus.notFound: "Não foi encontrado",
-    HttpStatus.internalServerError: "Erro interno no servidor"
-  };
+  static String _errorsHttp(int statusCode) {
+    var errors = {
+      HttpStatus.badRequest: "Erro de Bad Request",
+      HttpStatus.unauthorized: "Não está autorizado",
+      HttpStatus.notFound: "Não foi encontrado",
+      HttpStatus.internalServerError: "Erro interno no servidor",
+      HttpStatus.conflict: "Ocorreu um conflito com um registro já existente"
+    };
+
+    if(errors.containsKey(statusCode)) {
+      return errors[statusCode]!;
+    }
+    
+    return "Erro não identificado";
+  }
 }
