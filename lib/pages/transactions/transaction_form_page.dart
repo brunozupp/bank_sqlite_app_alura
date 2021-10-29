@@ -9,6 +9,7 @@ import 'package:bank_sqlite_app_alura/utils/modal_utils.dart';
 import 'package:bank_sqlite_app_alura/utils/snackbar_utils.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:uuid/uuid.dart';
 
 class TransactionFormPage extends StatefulWidget {
@@ -114,7 +115,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                             primary: ColorsApp.primaryColor
                           ),
                           onPressed: () async {
-                            
+
                             if(!_formKey.currentState!.validate()) {
                               SnackbarUtils.showSnackbarError(context: context, message: "Erro de validação");
                               return;
@@ -154,7 +155,19 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                                   FirebaseCrashlytics.instance.recordError(error, null);
                                 }
 
-                                SnackbarUtils.showSnackbarError(context: context, message: "Tempo de resposta muito elevado");
+                                // A cor não vai pegar pq precisa fazer uma configuração na parte do android. 
+                                // A partir da versão 30 da API do android precisa fazer isso
+                                Fluttertoast.showToast(
+                                  msg: "Tempo de resposta muito elevado",
+                                  toastLength: Toast.LENGTH_LONG,
+                                  gravity: ToastGravity.CENTER,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0
+                                );
+
+                                //SnackbarUtils.showSnackbarError(context: context, message: "Tempo de resposta muito elevado");
                               }, test: (e) => e is TimeoutException) // Testando para ter uma segurança a mais ao ter passado uma exceção
                               .catchError((error) {
 
