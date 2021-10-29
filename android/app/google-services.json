@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "67945174150",
+    "project_id": "bank-app-alura",
+    "storage_bucket": "bank-app-alura.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:67945174150:android:b102519b723f536093ed07",
+        "android_client_info": {
+          "package_name": "com.example.bank_sqlite_app_alura"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "67945174150-gaju5hioio5s3vveelq1e0va8man6t9n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bank_sqlite_app_alura",
+            "certificate_hash": "1c7566c38a4010e59afcbe27d0d29e27b69aeadb"
+          }
+        },
+        {
+          "client_id": "67945174150-49gh9teo2r1vusean56j3po4v3c1pjdf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBH74Y9nURbkczU1uvp5EhIZfmIri360cQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "67945174150-49gh9teo2r1vusean56j3po4v3c1pjdf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

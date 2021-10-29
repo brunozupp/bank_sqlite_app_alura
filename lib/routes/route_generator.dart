@@ -1,3 +1,4 @@
+import 'package:bank_sqlite_app_alura/bank_app_initializer.dart';
 import 'package:bank_sqlite_app_alura/models/contact.dart';
 import 'package:bank_sqlite_app_alura/pages/contacts/contact_form_page.dart';
 import 'package:bank_sqlite_app_alura/pages/contacts/contacts_list_page.dart';
@@ -13,7 +14,11 @@ class RouteGenerator {
     final args = settings.arguments;
 
     switch(settings.name) {
+
       case '/':
+        return MaterialPageRoute(builder: (_) => BankAppInitializer());
+
+      case '/dashboard':
         return MaterialPageRoute(builder: (_) => const DashboardPage());
       
       case '/contacts':
