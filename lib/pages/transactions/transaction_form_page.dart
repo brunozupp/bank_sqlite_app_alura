@@ -7,6 +7,7 @@ import 'package:bank_sqlite_app_alura/models/transaction.dart';
 import 'package:bank_sqlite_app_alura/styles/colors_app.dart';
 import 'package:bank_sqlite_app_alura/utils/modal_utils.dart';
 import 'package:bank_sqlite_app_alura/utils/snackbar_utils.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -146,12 +147,33 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                             // Tem que colocar a TimeoutException vindo primeiro pois ela é mais especifica
                             final result = await webclient.save(transactionCreated, password)
                               .catchError((error) {
+
+                                if (FirebaseCrashlytics.instance.isCrashlyticsCollectionEnabled) {
+                                  FirebaseCrashlytics.instance.setCustomKey("exception", error.toString());
+                                  FirebaseCrashlytics.instance.setCustomKey("http_body", transactionCreated.toJson());
+                                  FirebaseCrashlytics.instance.recordError(error, null);
+                                }
+
                                 SnackbarUtils.showSnackbarError(context: context, message: "Tempo de resposta muito elevado");
                               }, test: (e) => e is TimeoutException) // Testando para ter uma segurança a mais ao ter passado uma exceção
                               .catchError((error) {
+
+                                 if (FirebaseCrashlytics.instance.isCrashlyticsCollectionEnabled) {
+                                  FirebaseCrashlytics.instance.setCustomKey("exception", error.toString());
+                                  FirebaseCrashlytics.instance.setCustomKey("http_body", transactionCreated.toJson());
+                                  FirebaseCrashlytics.instance.recordError(error, null);
+                                }
+
                                 SnackbarUtils.showSnackbarError(context: context, message: error.message);
                               }, test: (e) => e is HttpExceptionError)
                               .catchError((error) {
+
+                                 if (FirebaseCrashlytics.instance.isCrashlyticsCollectionEnabled) {
+                                  FirebaseCrashlytics.instance.setCustomKey("exception", error.toString());
+                                  FirebaseCrashlytics.instance.setCustomKey("http_body", transactionCreated.toJson());
+                                  FirebaseCrashlytics.instance.recordError(error, null);
+                                }
+
                                 SnackbarUtils.showSnackbarError(context: context, message: "Erro desconhecido");
                               }, test: (e) => e is Exception)
                               .whenComplete(() {

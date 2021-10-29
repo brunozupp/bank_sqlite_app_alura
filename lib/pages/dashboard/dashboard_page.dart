@@ -1,8 +1,13 @@
 import 'package:bank_sqlite_app_alura/pages/dashboard/components/card_contact_component.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({ Key? key }) : super(key: key);
+
+  void teste() {
+    FirebaseCrashlytics.instance.crash();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +35,7 @@ class DashboardPage extends StatelessWidget {
                     text: "Contatos",
                     margin: const EdgeInsets.only(right: 10),
                     onTap: () => Navigator.of(context).pushNamed("/contacts"),
+                    //onTap: () => teste(),
                   ),
                   CardContactComponent(
                     icon: Icons.description,

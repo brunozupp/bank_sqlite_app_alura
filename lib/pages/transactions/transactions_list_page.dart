@@ -3,6 +3,7 @@ import 'package:bank_sqlite_app_alura/models/transaction.dart';
 import 'package:bank_sqlite_app_alura/utils/snackbar_utils.dart';
 import 'package:bank_sqlite_app_alura/widgets/centered_message_widget.dart';
 import 'package:bank_sqlite_app_alura/widgets/progress_widget.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
 import 'components/card_item_component.dart';
@@ -29,6 +30,9 @@ class _TransactionsListPageState extends State<TransactionsListPage> {
         builder: (context, snapshot) {
 
           if(snapshot.hasError) {
+            if (FirebaseCrashlytics.instance.isCrashlyticsCollectionEnabled) {
+              FirebaseCrashlytics.instance.recordError(snapshot.error, snapshot.stackTrace);
+            }
             return const CenteredMessageWidget(
               message: "Erro na execução",
               icon: Icons.error,
