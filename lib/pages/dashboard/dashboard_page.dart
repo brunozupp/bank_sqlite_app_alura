@@ -43,6 +43,12 @@ class DashboardPage extends StatelessWidget {
                     margin: const EdgeInsets.only(right: 10),
                     onTap: () => Navigator.of(context).pushNamed("/transactions"),
                   ),
+                  CardContactComponent(
+                    icon: Icons.account_balance,
+                    text: "Saldo",
+                    margin: const EdgeInsets.only(right: 10),
+                    onTap: () => Navigator.of(context).pushNamed("/balance"),
+                  ),
                 ],
               ),
             ),

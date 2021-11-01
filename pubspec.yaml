@@ -42,6 +42,7 @@ dependencies:
   firebase_core: ^1.8.0
   firebase_crashlytics: ^2.2.4
   fluttertoast: ^8.0.8
+  provider: ^6.0.1
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,6 @@
 import 'package:bank_sqlite_app_alura/bank_app_initializer.dart';
 import 'package:bank_sqlite_app_alura/models/contact.dart';
+import 'package:bank_sqlite_app_alura/pages/balance/balance_page.dart';
 import 'package:bank_sqlite_app_alura/pages/contacts/contact_form_page.dart';
 import 'package:bank_sqlite_app_alura/pages/contacts/contacts_list_page.dart';
 import 'package:bank_sqlite_app_alura/pages/dashboard/dashboard_page.dart';
@@ -46,6 +47,9 @@ class RouteGenerator {
         }
 
         return _errorWrongType();
+      
+      case '/balance':
+        return MaterialPageRoute(builder: (_) => const BalancePage());
       
       default:
         _routeNotFound();
