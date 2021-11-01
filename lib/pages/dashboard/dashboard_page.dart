@@ -49,6 +49,12 @@ class DashboardPage extends StatelessWidget {
                     margin: const EdgeInsets.only(right: 10),
                     onTap: () => Navigator.of(context).pushNamed("/balance"),
                   ),
+                  CardContactComponent(
+                    icon: Icons.transform,
+                    text: "Transferência",
+                    margin: const EdgeInsets.only(right: 10),
+                    onTap: () => Navigator.of(context).pushNamed("/transfers"),
+                  ),
                 ],
               ),
             ),
