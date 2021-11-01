@@ -14,21 +14,32 @@ class BalancePage extends StatelessWidget {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Align(
-                alignment: Alignment.center,
-                child: Consumer<Balance>(
-                  builder: (context,balance,child) {
-                    return BalanceItemComponent(
-                      balance: balance,
-                    );
-                  },
-                )
-              ),
+            Align(
+              alignment: Alignment.center,
+              child: Consumer<Balance>(
+                builder: (context,balance,child) {
+                  return BalanceItemComponent(
+                    balance: balance,
+                  );
+                },
+              )
             ),
+            ButtonBar(
+              alignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                  onPressed: () => Navigator.of(context).pushNamed("/deposit/form"), 
+                  child: const Text("Depositar")
+                ),
+                ElevatedButton(
+                  onPressed: () => Navigator.of(context).pushNamed("/transfers/form"),
+                  child: const Text("Transferir")
+                ),
+              ],
+            )
           ],
         ),
       ),

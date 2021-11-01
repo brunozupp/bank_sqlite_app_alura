@@ -21,7 +21,7 @@ class CardItemComponent extends StatelessWidget {
           ),
         ),
         subtitle: Text(
-          "Valor: ${transfer.accountNumber.toString()}",
+          "Valor: ${transfer.value.toString()}",
           style: const TextStyle(
             fontSize: 16
           ),

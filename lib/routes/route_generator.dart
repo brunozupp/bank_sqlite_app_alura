@@ -5,6 +5,7 @@ import 'package:bank_sqlite_app_alura/pages/balance/balance_page.dart';
 import 'package:bank_sqlite_app_alura/pages/contacts/contact_form_page.dart';
 import 'package:bank_sqlite_app_alura/pages/contacts/contacts_list_page.dart';
 import 'package:bank_sqlite_app_alura/pages/dashboard/dashboard_page.dart';
+import 'package:bank_sqlite_app_alura/pages/deposit/deposit_form_page.dart';
 import 'package:bank_sqlite_app_alura/pages/transactions/transaction_form_page.dart';
 import 'package:bank_sqlite_app_alura/pages/transactions/transactions_list_page.dart';
 import 'package:bank_sqlite_app_alura/pages/transfers/transfer_form_page.dart';
@@ -53,6 +54,9 @@ class RouteGenerator {
       
       case '/balance':
         return MaterialPageRoute(builder: (_) => const BalancePage());
+
+      case '/deposit/form':
+        return MaterialPageRoute(builder: (_) => DepositFormPage());
 
       case '/transfers':
         return MaterialPageRoute(builder: (_) => const TransfersListPage());

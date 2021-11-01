@@ -28,6 +28,14 @@ class TransfersListPage extends StatelessWidget {
 
           final transfers = value.transfers;
 
+          if(transfers.isEmpty) {
+            return const Center(
+              child: Text(
+                "Nenhuma transferência registrada"
+              ),
+            );
+          }
+
           return ListView.builder(
             itemCount: transfers.length,
             itemBuilder: (_,index) {
